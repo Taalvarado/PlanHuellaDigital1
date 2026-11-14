@@ -20,10 +20,10 @@ export default function EvaluacionForm() {
     setLoading(true);
     setResultadoMensaje(null);
 
+    // Ajustado a los nombres exactos de columnas de tu tabla en NocoDB ('nombre' y 'reflexión')
     const datos = {
-      nombre_estudiante: nombre,
-      respuesta_quiz: respuesta,
-      fecha: new Date().toISOString()
+      nombre: nombre,
+      reflexion: respuesta
     };
 
     const res = await guardarEvaluacionEstudiante(datos);

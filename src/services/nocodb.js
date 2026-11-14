@@ -1,26 +1,27 @@
 // src/services/nocodb.js
 
-// Reemplaza estas constantes con las credenciales de tu proyecto en NocoDB Cloud
-const NOCODB_API_URL = 'https://app.nocodb.com/api/v1/db/data/v1/p_plan_huella/evaluaciones';
-const NOCODB_TOKEN = 'YOUR_NOCODB_API_TOKEN';
+// Endpoint oficial de NocoDB Cloud (API v2) utilizando el Table ID 'mx7fmn1b5e21rer'
+const API_URL = 'https://app.nocodb.com/api/v2/tables/mx7fmn1b5e21rer/records';
+const API_TOKEN = import.meta.env.VITE_NOCODB_TOKEN || 'nc_pat_kevmXQ1PARW7ycPjQh7VZa4vhrTAlf4vS2JKKBnL';
 
 /**
  * Registra el progreso o respuesta de un estudiante en NocoDB Cloud.
- * @param {Object} datosEstudiante - Objeto con nombre, grado y puntaje/respuestas
+ * @param {Object} datosEstudiante Objeto con nombre y reflexión
  */
 export async function guardarEvaluacionEstudiante(datosEstudiante) {
   try {
-    const response = await fetch(NOCODB_API_URL, {
+    const response = await fetch(API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'xc-token': NOCODB_TOKEN,
+        'xc-token': API_TOKEN,
       },
       body: JSON.stringify(datosEstudiante),
     });
 
     if (!response.ok) {
-      throw new Error(`Error HTTP: ${response.status} - ${response.statusText}`);
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `Error HTTP: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
